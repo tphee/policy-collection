@@ -1,0 +1,99 @@
+apiVersion: policy.open-cluster-management.io/v1
+kind: Policy
+metadata:
+  name: policy-github-oauth
+  namespace: default
+  annotations:
+    policy.open-cluster-management.io/standards: NIST SP 800-53
+    policy.open-cluster-management.io/categories: CM Configuration Management
+    policy.open-cluster-management.io/controls: CM-2 Baseline Configuration
+    integrityshield.io/message: H4sIAARYQWAAA+1WTXPTMBC9+1docmSqUmCYYXJr0wzNoTSTBC4MB8VeJ6KyJCTZtHT631nLVmK7dpPChQN7SqT90L63u16m+Rcwlis5JloJHt+fKg2SxiK3DgzNmGQbyEC6U65eF2+iWy6TMZl71SgDxxLm2DgiRLIMgg+64W6br6liudvWd1azGBUSSFkuHB4yKZVjDkPb0p4cEd86JhNmEjsmn2bLFVnOyYezM/r+3ZH2MXOwUYYDOphck4mSKd/kxj+CXO9Uj/WmpDNKeF/0LblgFgSX0HYbWQ1xmZ9Bu4T7s/PYecC5TJXJ8C7hlq0FILApExaiEJ06yLTAR9cIUaLW3yF2l5Byyb0Tf14KeymTwbBitPXomt6g0aQ5SEV3h+dKQsZBnst8ZwMFGO7ux0Son50wvnKWIDBxZZqOCYE7TC+B9mGJ022+BvqqdczlgO6+JINUKHfR31vECi84kzGs7jXCkCHEW1ZAx/UwWUGapMWeAU+a3fK0S1OQiq6b8ybiQfqIClIRVlfDk/suZ0F4ggWDvMyNKvC3sX1KJSRVJfTflhILjp5ml2MyuzygtITYgBt21S6+QTVlNkzyX80J0y/YVf2NMmCTMa253FyD26qkhJTxbED1iIc6X0EfubuqVf7FJqdll1vPy/82/7s2H2zpZRveIId7erC8Gp/d3VSh1Zh5ol2V4Y1mP/Jufvh9Gojf6lcy/7xaTieL6epquphGlNLoxeVabxcC31yeXuBf7LSePWNd3dA/3DfIw2OkQ5QFpI0FJpwOuO68cJGLEi5M9KNRuR7jL22fSTKyua8WX2v02aVpF2vfp/swB9F8gv+Bh/Wg73PrWfEOIHQU+GF41G/BwZTwxqCmBFc9l6PuaGVyGEXNIq0WtWTSMT0vGBflGrV3254mGXPxdnqnDVjb/CZQ8nALOJJAFtwoWaZ2UjYMjkk0JTN5Qgom8nJp/DpKoBh9e4x+A4EXI6o4CwAA
+    integrityshield.io/signature: LS0tLS1CRUdJTiBQR1AgU0lHTkFUVVJFLS0tLS0KCmlRSEtCQUFCQ0FBMEZpRUVaVE5qLzFCbmlyelE5ZitBamtlSnRLUTlaajBGQW1CQldBUVdISE5wWjI1bGNrQmwKYm5SbGNuQnlhWE5sTG1OdmJRQUtDUkNPUjRtMHBEMW1QZTFlQy85TVVzMmJrRXJYaDhSS1dWUmZPY0JrZDdVdgp6ZTl2NzBXNkpWNjlnWUx5OS9xUlE4b1RySEh6NDViRkZvbnJsNDY3Znc5NUxxdWFsNTBNQmRXWFhkUVg3TDJqCmRFY29zVTlQRWNNU2trWnlHRXV4S2lNQlBKeXNiRSt2MjU5dmpUTWM1M1RwZktRd1ZtUm5VY2JvcVdtZHJxbHQKZTcxUCtic1FPTDM0R0xkOVFrTWI5c2xrZG04cjJpYUhSckpsMkRIUFJPYS8vOFhFWXZoL0VtSHZrUm5VMndlMQpGNU5DUWRsbXZ4WFdySjBJV0R1WG5OTUxWZHRwQnJnQTlYRjNOLy82TlhSMTU0aU1OZlpoSEZIeGF2VTdXc0hOCkpEN2VDeDJZTlB6NWdFNFFJSmlMaTNlNnlOUjZFOGZaSlYzWG5DY1NpVjNpSDVwc3BPeWJRMi9IVm5GRDQzZmsKdmhxWjRjVThMK0xpeDEzZTUya0FWRHpzRHJaa0pRNis0cFNsOG1zRmZ4WW5ZZXF0aU41TWo5ZXF5VWZ0eW9rTgpKb1BwbzBGMVBpczZaL25sMXJTcUFVVVpKNkUrZjFBS2FobE5PdnBmWVMxaGgrem5meEU3R2VJZUhSb0dvMGs0CkpsbEFqcjY1NFptQVBwVmZVS0UycFlZK0tpRmtLQTRzRkxxdEMyRT0KPVovMy8KLS0tLS1FTkQgUEdQIFNJR05BVFVSRS0tLS0tCg==
+spec:
+  remediationAction: inform
+  disabled: false
+  policy-templates:
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: github-oauth
+        spec:
+          remediationAction: inform
+          severity: low
+          namespaceSelector:
+            exclude:
+              - kube-*
+            include:
+              - default
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: config.openshift.io/v1
+                kind: OAuth
+                metadata:
+                  name: cluster
+                spec:
+                  identityProviders:
+                    - github:
+                        clientID: ID
+                        clientSecret:
+                          name: github
+                        organizations:
+                          - open-cluster-management
+                      mappingMethod: claim
+                      name: github
+                      type: GitHub
+    - objectDefinition:
+        apiVersion: policy.open-cluster-management.io/v1
+        kind: ConfigurationPolicy
+        metadata:
+          name: git-hub-secret
+        spec:
+          remediationAction: inform
+          severity: low
+          namespaceSelector:
+            exclude:
+              - kube-*
+            include:
+              - default
+          object-templates:
+            - complianceType: musthave
+              objectDefinition:
+                apiVersion: v1
+                kind: Secret
+                metadata:
+                  name: github
+                  namespace: openshift-config
+                type: Opaque
+                data:
+                  clientSecret: PUTSECRETHERE
+---
+apiVersion: policy.open-cluster-management.io/v1
+kind: PlacementBinding
+metadata:
+  name: binding-policy-github-oauth
+  namespace: default
+  annotations: {integrityshield.io/message: H4sIAARYQWAAA+1WTXPTMBC9+1docmSqUmCYYXJr0wzNoTSTBC4MB8VeJ6KyJCTZtHT631nLVmK7dpPChQN7SqT90L63u16m+Rcwlis5JloJHt+fKg2SxiK3DgzNmGQbyEC6U65eF2+iWy6TMZl71SgDxxLm2DgiRLIMgg+64W6br6liudvWd1azGBUSSFkuHB4yKZVjDkPb0p4cEd86JhNmEjsmn2bLFVnOyYezM/r+3ZH2MXOwUYYDOphck4mSKd/kxj+CXO9Uj/WmpDNKeF/0LblgFgSX0HYbWQ1xmZ9Bu4T7s/PYecC5TJXJ8C7hlq0FILApExaiEJ06yLTAR9cIUaLW3yF2l5Byyb0Tf14KeymTwbBitPXomt6g0aQ5SEV3h+dKQsZBnst8ZwMFGO7ux0Son50wvnKWIDBxZZqOCYE7TC+B9mGJ022+BvqqdczlgO6+JINUKHfR31vECi84kzGs7jXCkCHEW1ZAx/UwWUGapMWeAU+a3fK0S1OQiq6b8ybiQfqIClIRVlfDk/suZ0F4ggWDvMyNKvC3sX1KJSRVJfTflhILjp5ml2MyuzygtITYgBt21S6+QTVlNkzyX80J0y/YVf2NMmCTMa253FyD26qkhJTxbED1iIc6X0EfubuqVf7FJqdll1vPy/82/7s2H2zpZRveIId7erC8Gp/d3VSh1Zh5ol2V4Y1mP/Jufvh9Gojf6lcy/7xaTieL6epquphGlNLoxeVabxcC31yeXuBf7LSePWNd3dA/3DfIw2OkQ5QFpI0FJpwOuO68cJGLEi5M9KNRuR7jL22fSTKyua8WX2v02aVpF2vfp/swB9F8gv+Bh/Wg73PrWfEOIHQU+GF41G/BwZTwxqCmBFc9l6PuaGVyGEXNIq0WtWTSMT0vGBflGrV3254mGXPxdnqnDVjb/CZQ8nALOJJAFtwoWaZ2UjYMjkk0JTN5Qgom8nJp/DpKoBh9e4x+A4EXI6o4CwAA, integrityshield.io/signature: LS0tLS1CRUdJTiBQR1AgU0lHTkFUVVJFLS0tLS0KCmlRSEtCQUFCQ0FBMEZpRUVaVE5qLzFCbmlyelE5ZitBamtlSnRLUTlaajBGQW1CQldBUVdISE5wWjI1bGNrQmwKYm5SbGNuQnlhWE5sTG1OdmJRQUtDUkNPUjRtMHBEMW1QZTFlQy85TVVzMmJrRXJYaDhSS1dWUmZPY0JrZDdVdgp6ZTl2NzBXNkpWNjlnWUx5OS9xUlE4b1RySEh6NDViRkZvbnJsNDY3Znc5NUxxdWFsNTBNQmRXWFhkUVg3TDJqCmRFY29zVTlQRWNNU2trWnlHRXV4S2lNQlBKeXNiRSt2MjU5dmpUTWM1M1RwZktRd1ZtUm5VY2JvcVdtZHJxbHQKZTcxUCtic1FPTDM0R0xkOVFrTWI5c2xrZG04cjJpYUhSckpsMkRIUFJPYS8vOFhFWXZoL0VtSHZrUm5VMndlMQpGNU5DUWRsbXZ4WFdySjBJV0R1WG5OTUxWZHRwQnJnQTlYRjNOLy82TlhSMTU0aU1OZlpoSEZIeGF2VTdXc0hOCkpEN2VDeDJZTlB6NWdFNFFJSmlMaTNlNnlOUjZFOGZaSlYzWG5DY1NpVjNpSDVwc3BPeWJRMi9IVm5GRDQzZmsKdmhxWjRjVThMK0xpeDEzZTUya0FWRHpzRHJaa0pRNis0cFNsOG1zRmZ4WW5ZZXF0aU41TWo5ZXF5VWZ0eW9rTgpKb1BwbzBGMVBpczZaL25sMXJTcUFVVVpKNkUrZjFBS2FobE5PdnBmWVMxaGgrem5meEU3R2VJZUhSb0dvMGs0CkpsbEFqcjY1NFptQVBwVmZVS0UycFlZK0tpRmtLQTRzRkxxdEMyRT0KPVovMy8KLS0tLS1FTkQgUEdQIFNJR05BVFVSRS0tLS0tCg==}
+placementRef:
+  name: placement-policy-github-oauth
+  kind: PlacementRule
+  apiGroup: apps.open-cluster-management.io
+subjects:
+  - name: policy-github-oauth
+    kind: Policy
+    apiGroup: policy.open-cluster-management.io
+---
+apiVersion: apps.open-cluster-management.io/v1
+kind: PlacementRule
+metadata:
+  name: placement-policy-github-oauth
+  namespace: default
+  annotations: {integrityshield.io/message: H4sIAARYQWAAA+1WTXPTMBC9+1docmSqUmCYYXJr0wzNoTSTBC4MB8VeJ6KyJCTZtHT631nLVmK7dpPChQN7SqT90L63u16m+Rcwlis5JloJHt+fKg2SxiK3DgzNmGQbyEC6U65eF2+iWy6TMZl71SgDxxLm2DgiRLIMgg+64W6br6liudvWd1azGBUSSFkuHB4yKZVjDkPb0p4cEd86JhNmEjsmn2bLFVnOyYezM/r+3ZH2MXOwUYYDOphck4mSKd/kxj+CXO9Uj/WmpDNKeF/0LblgFgSX0HYbWQ1xmZ9Bu4T7s/PYecC5TJXJ8C7hlq0FILApExaiEJ06yLTAR9cIUaLW3yF2l5Byyb0Tf14KeymTwbBitPXomt6g0aQ5SEV3h+dKQsZBnst8ZwMFGO7ux0Son50wvnKWIDBxZZqOCYE7TC+B9mGJ022+BvqqdczlgO6+JINUKHfR31vECi84kzGs7jXCkCHEW1ZAx/UwWUGapMWeAU+a3fK0S1OQiq6b8ybiQfqIClIRVlfDk/suZ0F4ggWDvMyNKvC3sX1KJSRVJfTflhILjp5ml2MyuzygtITYgBt21S6+QTVlNkzyX80J0y/YVf2NMmCTMa253FyD26qkhJTxbED1iIc6X0EfubuqVf7FJqdll1vPy/82/7s2H2zpZRveIId7erC8Gp/d3VSh1Zh5ol2V4Y1mP/Jufvh9Gojf6lcy/7xaTieL6epquphGlNLoxeVabxcC31yeXuBf7LSePWNd3dA/3DfIw2OkQ5QFpI0FJpwOuO68cJGLEi5M9KNRuR7jL22fSTKyua8WX2v02aVpF2vfp/swB9F8gv+Bh/Wg73PrWfEOIHQU+GF41G/BwZTwxqCmBFc9l6PuaGVyGEXNIq0WtWTSMT0vGBflGrV3254mGXPxdnqnDVjb/CZQ8nALOJJAFtwoWaZ2UjYMjkk0JTN5Qgom8nJp/DpKoBh9e4x+A4EXI6o4CwAA, integrityshield.io/signature: LS0tLS1CRUdJTiBQR1AgU0lHTkFUVVJFLS0tLS0KCmlRSEtCQUFCQ0FBMEZpRUVaVE5qLzFCbmlyelE5ZitBamtlSnRLUTlaajBGQW1CQldBUVdISE5wWjI1bGNrQmwKYm5SbGNuQnlhWE5sTG1OdmJRQUtDUkNPUjRtMHBEMW1QZTFlQy85TVVzMmJrRXJYaDhSS1dWUmZPY0JrZDdVdgp6ZTl2NzBXNkpWNjlnWUx5OS9xUlE4b1RySEh6NDViRkZvbnJsNDY3Znc5NUxxdWFsNTBNQmRXWFhkUVg3TDJqCmRFY29zVTlQRWNNU2trWnlHRXV4S2lNQlBKeXNiRSt2MjU5dmpUTWM1M1RwZktRd1ZtUm5VY2JvcVdtZHJxbHQKZTcxUCtic1FPTDM0R0xkOVFrTWI5c2xrZG04cjJpYUhSckpsMkRIUFJPYS8vOFhFWXZoL0VtSHZrUm5VMndlMQpGNU5DUWRsbXZ4WFdySjBJV0R1WG5OTUxWZHRwQnJnQTlYRjNOLy82TlhSMTU0aU1OZlpoSEZIeGF2VTdXc0hOCkpEN2VDeDJZTlB6NWdFNFFJSmlMaTNlNnlOUjZFOGZaSlYzWG5DY1NpVjNpSDVwc3BPeWJRMi9IVm5GRDQzZmsKdmhxWjRjVThMK0xpeDEzZTUya0FWRHpzRHJaa0pRNis0cFNsOG1zRmZ4WW5ZZXF0aU41TWo5ZXF5VWZ0eW9rTgpKb1BwbzBGMVBpczZaL25sMXJTcUFVVVpKNkUrZjFBS2FobE5PdnBmWVMxaGgrem5meEU3R2VJZUhSb0dvMGs0CkpsbEFqcjY1NFptQVBwVmZVS0UycFlZK0tpRmtLQTRzRkxxdEMyRT0KPVovMy8KLS0tLS1FTkQgUEdQIFNJR05BVFVSRS0tLS0tCg==}
+spec:
+  clusterConditions:
+    - status: "True"
+      type: ManagedClusterConditionAvailable
+  clusterSelector:
+    matchExpressions:
+      - {key: environment, operator: In, values: ["dev"]}
